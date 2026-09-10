@@ -21,10 +21,32 @@ export const FIXTURES = [
   { iso: '2027-06-17', date: 'Thu 17 Jun 2027', time: '22:00', opponent: 'ZVC Paris nog niet misschien', home: false, venue: 'Sportcomplex Opglabbeek', month: 'June 2027' },
 ];
 
-export function getNextMatch() {
+export function fixtureKey(fixture) {
+  return `${fixture.iso}|${fixture.opponent}`;
+}
+
+// Parses a "YYYY-MM-DD" fixture date as local midnight, so it compares
+// consistently with `new Date()` regardless of the visitor's timezone
+// (a plain `new Date(iso)` would parse it as UTC midnight instead, which
+// can be a different calendar day from "today" for non-UTC visitors).
+export function parseIsoDate(iso) {
+  const [year, month, day] = iso.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+function startOfToday() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const upcoming = FIXTURES.find((f) => new Date(f.iso) >= today);
+  return today;
+}
+
+export function isPastFixture(iso) {
+  return parseIsoDate(iso) < startOfToday();
+}
+
+export function getNextMatch() {
+  const today = startOfToday();
+  const upcoming = FIXTURES.find((f) => parseIsoDate(f.iso) >= today);
   return upcoming || FIXTURES[FIXTURES.length - 1];
 }
 

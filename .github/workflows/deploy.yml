@@ -24,6 +24,8 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run build
+        env:
+          VITE_SCORES_API_URL: ${{ secrets.VITE_SCORES_API_URL }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

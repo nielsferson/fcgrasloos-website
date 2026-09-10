@@ -43,7 +43,24 @@ src/
 public/
   images/       Static assets (logo, photos)
   CNAME         Custom domain for GitHub Pages
+worker/         Cloudflare Worker backing the calendar's score editing
+                (see worker/README.md) — optional, only needed for that
+                feature
 ```
+
+## Match scores (optional)
+
+The Calendar page can show and let an admin edit match scores. This talks
+to a small Cloudflare Worker (see `worker/README.md` for setup) so the
+password is checked server-side and scores are visible to every visitor,
+not just the browser that entered them.
+
+Set `VITE_SCORES_API_URL` to the deployed Worker's URL at build time — for
+local dev, put it in a `.env` file (see `.env.example`); for the GitHub
+Pages deploy, add it as a repository secret named `VITE_SCORES_API_URL`
+(Settings → Secrets and variables → Actions), which `deploy.yml` already
+passes through to the build. If it's unset, the "Login" link and score
+display are simply hidden and the rest of the site is unaffected.
 
 ## Progress
 
