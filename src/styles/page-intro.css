@@ -1,0 +1,92 @@
+.page-intro {
+  background: var(--fc-white);
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--fc-border);
+}
+
+.page-intro__inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.page-intro__title {
+  font-size: 3.4rem;
+  line-height: 0.95;
+  color: var(--fc-black);
+  margin: 14px 0 12px;
+}
+
+.page-intro__sub {
+  font-family: var(--font-body);
+  font-size: 1.02rem;
+  color: var(--fc-gray);
+}
+
+.page-intro__motto {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.page-intro__motto-script {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 1.7rem;
+  line-height: 1.05;
+  color: #c7cbd4;
+  transform: rotate(-4deg);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.page-intro__motto-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 24px;
+  border-left: 1px solid var(--fc-border);
+}
+
+.page-intro__motto-list span:not(.page-intro__rule) {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fc-black);
+}
+
+.page-intro__rule {
+  display: block;
+  width: 60px;
+  height: 4px;
+  margin-top: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--fc-blue) 0%,
+    var(--fc-blue) 33%,
+    var(--fc-red) 33%,
+    var(--fc-red) 66%,
+    #d7dae0 66%,
+    #d7dae0 100%
+  );
+}
+
+@media (max-width: 720px) {
+  .page-intro {
+    padding: 40px 0 32px;
+  }
+
+  .page-intro__title {
+    font-size: 2.4rem;
+  }
+
+  .page-intro__motto {
+    display: none;
+  }
+}
