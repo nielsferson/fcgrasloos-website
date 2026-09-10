@@ -21,6 +21,10 @@ export const FIXTURES = [
   { iso: '2027-06-17', date: 'Thu 17 Jun 2027', time: '22:00', opponent: 'ZVC Paris nog niet misschien', home: false, venue: 'Sportcomplex Opglabbeek', month: 'June 2027' },
 ];
 
+export function fixtureKey(fixture) {
+  return `${fixture.iso}|${fixture.opponent}`;
+}
+
 export function getNextMatch() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);

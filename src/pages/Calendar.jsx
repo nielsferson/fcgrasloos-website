@@ -1,7 +1,10 @@
-import { Calendar as CalendarIcon, MapPin, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Calendar as CalendarIcon, MapPin, Users, Pencil, Check, X } from 'lucide-react';
 import PageIntro from '../components/PageIntro';
 import PitchCard from '../components/PitchCard';
-import { FIXTURES, getNextMatch, venueMapUrl } from '../data/fixtures';
+import { FIXTURES, getNextMatch, venueMapUrl, fixtureKey } from '../data/fixtures';
+import { useAuth } from '../context/AuthContext';
+import { scoresEnabled, fetchScores, saveScore } from '../lib/scoresApi';
 import '../styles/calendar.css';
 
 function groupByYear(fixtures) {
@@ -37,7 +40,49 @@ function isPast(iso) {
   return new Date(`${iso}T00:00:00`) < today;
 }
 
-function YearPanel({ year, matches, nextMatch }) {
+function ScoreEditor({ initial, onCancel, onSubmit }) {
+  const [home, setHome] = useState(initial?.home ?? '');
+  const [away, setAway] = useState(initial?.away ?? '');
+  const [saving, setSaving] = useState(false);
+
+  function submit(e) {
+    e.preventDefault();
+    if (home === '' || away === '') return;
+    setSaving(true);
+    onSubmit(Number(home), Number(away)).finally(() => setSaving(false));
+  }
+
+  return (
+    <form className="score-editor" onClick={(e) => e.stopPropagation()} onSubmit={submit}>
+      <input
+        type="number"
+        min="0"
+        max="99"
+        value={home}
+        onChange={(e) => setHome(e.target.value)}
+        aria-label="Home score"
+        autoFocus
+      />
+      <span>–</span>
+      <input
+        type="number"
+        min="0"
+        max="99"
+        value={away}
+        onChange={(e) => setAway(e.target.value)}
+        aria-label="Away score"
+      />
+      <button type="submit" className="score-editor__btn score-editor__btn--save" disabled={saving} aria-label="Save score">
+        <Check size={14} />
+      </button>
+      <button type="button" className="score-editor__btn" onClick={onCancel} aria-label="Cancel">
+        <X size={14} />
+      </button>
+    </form>
+  );
+}
+
+function YearPanel({ year, matches, nextMatch, scores, isAuthed, editingKey, setEditingKey, onSaveScore }) {
   const playedCount = matches.filter((m) => isPast(m.iso)).length;
 
   return (
@@ -62,9 +107,13 @@ function YearPanel({ year, matches, nextMatch }) {
           {group.matches.map((m) => {
             const badge = dateBadge(m.iso);
             const isNext = m.iso === nextMatch.iso && m.opponent === nextMatch.opponent;
+            const key = fixtureKey(m);
+            const score = scores[key];
+            const isEditing = editingKey === key;
+
             return (
               <div
-                key={m.iso + m.opponent}
+                key={key}
                 className={
                   'fixture-item' +
                   (isNext ? ' fixture-item--next' : '') +
@@ -91,9 +140,35 @@ function YearPanel({ year, matches, nextMatch }) {
                     </a>
                   </p>
                 </div>
-                <span className={'fixture-badge' + (m.home ? ' fixture-badge--home' : ' fixture-badge--away')}>
-                  {m.home ? 'HOME' : 'AWAY'}
-                </span>
+
+                {isEditing ? (
+                  <ScoreEditor
+                    initial={score}
+                    onCancel={() => setEditingKey(null)}
+                    onSubmit={(home, away) => onSaveScore(key, home, away)}
+                  />
+                ) : (
+                  <div className="fixture-item__trailing">
+                    {score && (
+                      <span className="fixture-item__score">
+                        {score.home}&ndash;{score.away}
+                      </span>
+                    )}
+                    <span className={'fixture-badge' + (m.home ? ' fixture-badge--home' : ' fixture-badge--away')}>
+                      {m.home ? 'HOME' : 'AWAY'}
+                    </span>
+                    {isAuthed && (
+                      <button
+                        type="button"
+                        className="fixture-item__edit"
+                        onClick={() => setEditingKey(key)}
+                        aria-label={`Edit score for ${m.opponent}`}
+                      >
+                        <Pencil size={13} />
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -106,6 +181,23 @@ function YearPanel({ year, matches, nextMatch }) {
 export default function Calendar() {
   const nextMatch = getNextMatch();
   const years = groupByYear(FIXTURES);
+  const { token, isAuthed } = useAuth();
+
+  const [scores, setScores] = useState({});
+  const [editingKey, setEditingKey] = useState(null);
+
+  useEffect(() => {
+    if (!scoresEnabled) return;
+    fetchScores().then(setScores).catch(() => {});
+  }, []);
+
+  async function handleSaveScore(key, home, away) {
+    const updated = await saveScore(token, key, home, away);
+    setScores(updated);
+    setEditingKey(null);
+  }
+
+  const nextMatchScore = scores[fixtureKey(nextMatch)];
 
   return (
     <>
@@ -120,7 +212,17 @@ export default function Calendar() {
         <div className="container cal-board__grid">
           <div className="year-columns">
             {years.map(({ year, matches }) => (
-              <YearPanel key={year} year={year} matches={matches} nextMatch={nextMatch} />
+              <YearPanel
+                key={year}
+                year={year}
+                matches={matches}
+                nextMatch={nextMatch}
+                scores={scores}
+                isAuthed={isAuthed}
+                editingKey={editingKey}
+                setEditingKey={setEditingKey}
+                onSaveScore={handleSaveScore}
+              />
             ))}
           </div>
 
@@ -131,8 +233,15 @@ export default function Calendar() {
                   <span className="next-match__eyebrow-rule" />
                   NEXT MATCH
                 </p>
-                <span className={'fixture-badge' + (nextMatch.home ? ' fixture-badge--home' : ' fixture-badge--away') + ' next-match__badge'}>
-                  {nextMatch.home ? 'HOME' : 'AWAY'}
+                <span className="next-match__header-right">
+                  {nextMatchScore && (
+                    <span className="fixture-item__score fixture-item__score--light">
+                      {nextMatchScore.home}&ndash;{nextMatchScore.away}
+                    </span>
+                  )}
+                  <span className={'fixture-badge' + (nextMatch.home ? ' fixture-badge--home' : ' fixture-badge--away') + ' next-match__badge'}>
+                    {nextMatch.home ? 'HOME' : 'AWAY'}
+                  </span>
                 </span>
               </div>
 
