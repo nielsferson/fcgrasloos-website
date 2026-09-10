@@ -93,22 +93,22 @@
   flex: 1 1 auto;
   min-width: 0;
   aspect-ratio: 4 / 3.1;
-  border: 10px solid;
-  border-image: repeating-linear-gradient(
-      45deg,
-      var(--fc-blue) 0 24px,
-      var(--fc-white) 24px 48px
-    )
-    10;
-  overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  border-radius: 14px;
+  padding: 5px;
+  background: linear-gradient(135deg, var(--fc-blue) 0%, var(--fc-navy) 45%, var(--fc-red) 100%);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    0 0 44px rgba(30, 80, 200, 0.28),
+    0 0 60px rgba(214, 31, 44, 0.16);
 }
 
 .hero__frame img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center 30%;
+  border-radius: 10px;
 }
 
 .hero__side-text {

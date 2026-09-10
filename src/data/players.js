@@ -16,3 +16,7 @@ export function cardSrc(id) {
 export function thumbSrc(id) {
   return `/images/players/player-${String(id).padStart(2, '0')}-thumb.jpg`;
 }
+
+export function jerseySrc(player) {
+  return player.isGK ? '/images/jerseys/jersey-gk.png' : '/images/jerseys/jersey-outfield.png';
+}

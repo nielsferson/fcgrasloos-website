@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ChevronRight } from 'lucide-react';
 import PageIntro from '../components/PageIntro';
-import { PLAYERS, cardSrc, thumbSrc } from '../data/players';
+import { PLAYERS, cardSrc, jerseySrc } from '../data/players';
 import '../styles/team.css';
 
 export default function Team() {
@@ -13,7 +12,7 @@ export default function Team() {
       <PageIntro
         eyebrow="OUR SQUAD"
         title="Meet the Team"
-        subtitle="Click a player name to reveal the player card."
+        subtitle="Click a player's jersey to reveal the player card."
         scriptLines={['More than', 'a team']}
       />
 
@@ -49,8 +48,12 @@ export default function Team() {
                   style={{ left: `${p.x}%`, top: `${p.y}%` }}
                   onClick={() => setSelectedId(p.id)}
                   aria-pressed={p.id === selectedId}
+                  aria-label={`${p.name}, ${p.role}`}
                 >
-                  <span className="pitch-player__jersey">{p.number}</span>
+                  <span className="pitch-player__jersey">
+                    <img src={jerseySrc(p)} alt="" />
+                    <span className="pitch-player__number">{p.number}</span>
+                  </span>
                   <span className="pitch-player__label">{p.name}</span>
                 </button>
               ))}
@@ -71,48 +74,22 @@ export default function Team() {
               <p className="panel__caption panel__caption--single">FC GRASLOOS</p>
             </div>
 
-            <div className="roster-panel__body">
-              <div className="roster-panel__card">
-                <div className="roster-panel__card-media">
-                  <img
-                    src={cardSrc(selectedId)}
-                    alt={`${selected.name} (${selected.pos}) player card`}
-                    key={selectedId}
-                  />
-                  <span className={'roster-panel__card-jersey' + (selected.isGK ? ' roster-panel__card-jersey--gk' : '')}>
-                    {selected.number}
-                  </span>
-                </div>
-                <div className="roster-panel__card-info">
-                  <p className="roster-panel__card-pos">{selected.pos}</p>
-                  <h2 className="roster-panel__card-name">{selected.name}</h2>
-                  <p className="roster-panel__card-role">{selected.role}</p>
-                </div>
+            <div className="roster-panel__card">
+              <div className="roster-panel__card-media">
+                <img
+                  src={cardSrc(selectedId)}
+                  alt={`${selected.name} (${selected.pos}) player card`}
+                  key={selectedId}
+                />
+                <span className={'roster-panel__card-jersey' + (selected.isGK ? ' roster-panel__card-jersey--gk' : '')}>
+                  {selected.number}
+                </span>
               </div>
-
-              <ul className="roster-list">
-                {PLAYERS.map((p) => (
-                  <li key={p.id}>
-                    <button
-                      type="button"
-                      className={
-                        'roster-list__row' + (p.id === selectedId ? ' roster-list__row--active' : '')
-                      }
-                      onClick={() => setSelectedId(p.id)}
-                      aria-pressed={p.id === selectedId}
-                    >
-                      <img src={thumbSrc(p.id)} alt="" className="roster-list__thumb" />
-                      <span className="roster-list__text">
-                        <span className="roster-list__name">{p.name}</span>
-                        <span className="roster-list__role">
-                          {p.role} ({p.pos})
-                        </span>
-                      </span>
-                      <ChevronRight size={18} className="roster-list__chevron" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <div className="roster-panel__card-info">
+                <p className="roster-panel__card-pos">{selected.pos}</p>
+                <h2 className="roster-panel__card-name">{selected.name}</h2>
+                <p className="roster-panel__card-role">{selected.role}</p>
+              </div>
             </div>
           </div>
         </div>
