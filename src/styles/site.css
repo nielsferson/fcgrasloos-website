@@ -146,6 +146,16 @@ p {
   flex-shrink: 0;
 }
 
+.venue-link {
+  cursor: pointer;
+}
+
+.venue-link:hover,
+.venue-link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 @media (max-width: 640px) {
   .container {
     padding: 0 20px;

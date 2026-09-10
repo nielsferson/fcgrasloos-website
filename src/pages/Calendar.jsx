@@ -1,7 +1,7 @@
 import { Calendar as CalendarIcon, MapPin, Users } from 'lucide-react';
 import PageIntro from '../components/PageIntro';
 import PitchCard from '../components/PitchCard';
-import { FIXTURES, getNextMatch } from '../data/fixtures';
+import { FIXTURES, getNextMatch, venueMapUrl } from '../data/fixtures';
 import '../styles/calendar.css';
 
 function groupByYear(fixtures) {
@@ -80,7 +80,15 @@ function YearPanel({ year, matches, nextMatch }) {
                   <p className="fixture-item__meta">
                     <span>{m.time}</span>
                     <span>&bull;</span>
-                    <span>{m.venue}</span>
+                    <a
+                      href={venueMapUrl(m.venue)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="venue-link"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {m.venue}
+                    </a>
                   </p>
                 </div>
                 <span className={'fixture-badge' + (m.home ? ' fixture-badge--home' : ' fixture-badge--away')}>
@@ -153,10 +161,15 @@ export default function Calendar() {
                     {nextMatch.time}
                   </span>
                 </div>
-                <div className="next-match__detail next-match__detail--right">
+                <a
+                  href={venueMapUrl(nextMatch.venue)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="next-match__detail next-match__detail--right venue-link"
+                >
                   <MapPin size={16} />
                   <span>{nextMatch.venue}</span>
-                </div>
+                </a>
               </div>
             </div>
 

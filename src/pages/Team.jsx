@@ -52,7 +52,6 @@ export default function Team() {
                 >
                   <span className="pitch-player__jersey">
                     <img src={jerseySrc(p)} alt="" />
-                    <span className="pitch-player__number">{p.number}</span>
                   </span>
                   <span className="pitch-player__label">{p.name}</span>
                 </button>
