@@ -139,16 +139,13 @@
   border: 2px solid transparent;
 }
 
-.pitch-player:hover .pitch-player__jersey {
+.pitch-player:hover .pitch-player__jersey,
+.pitch-player:focus-visible .pitch-player__jersey {
   transform: scale(1.08);
 }
 
-.pitch-player--active .pitch-player__jersey {
-  background: var(--fc-red);
-  transform: scale(1.08);
-}
-
-.pitch-player--active .pitch-player__label {
+.pitch-player:hover .pitch-player__label,
+.pitch-player:focus-visible .pitch-player__label {
   color: var(--fc-blue);
   border-color: var(--fc-blue);
 }
@@ -173,25 +170,6 @@
 
 /* ===== ROSTER PANEL ===== */
 
-.roster-panel__body {
-  display: grid;
-  grid-template-columns: minmax(230px, 300px) 1fr;
-  gap: 22px;
-  align-items: start;
-}
-
-.roster-panel__card {
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 10px 24px rgba(10, 14, 20, 0.18);
-}
-
-.roster-panel__card img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
 .roster-list {
   display: flex;
   flex-direction: column;
@@ -211,12 +189,9 @@
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.roster-list__row:hover {
+.roster-list__row:hover,
+.roster-list__row:focus-visible {
   background: #eceef2;
-}
-
-.roster-list__row--active {
-  background: #e8f0fe;
   border-color: var(--fc-blue);
 }
 
@@ -251,10 +226,13 @@
 .roster-list__chevron {
   color: var(--fc-gray);
   flex-shrink: 0;
+  transition: transform 0.15s ease;
 }
 
-.roster-list__row--active .roster-list__chevron {
+.roster-list__row:hover .roster-list__chevron,
+.roster-list__row:focus-visible .roster-list__chevron {
   color: var(--fc-blue);
+  transform: translateX(2px);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -262,10 +240,6 @@
 @media (max-width: 1080px) {
   .team-board__grid {
     grid-template-columns: 1fr;
-  }
-
-  .roster-panel__body {
-    grid-template-columns: minmax(200px, 280px) 1fr;
   }
 }
 
@@ -285,15 +259,6 @@
 
   .panel__caption {
     text-align: left;
-  }
-
-  .roster-panel__body {
-    grid-template-columns: 1fr;
-  }
-
-  .roster-panel__card {
-    max-width: 280px;
-    margin: 0 auto;
   }
 
   .pitch-player__jersey {

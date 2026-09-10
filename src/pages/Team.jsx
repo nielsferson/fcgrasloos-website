@@ -1,37 +1,34 @@
 import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import PageIntro from '../components/PageIntro';
+import PlayerModal from '../components/PlayerModal';
+import { PLAYERS, thumbSrc } from '../data/players';
 import '../styles/team.css';
 
-const PLAYERS = [
-  { id: 1, name: 'Player 1', role: 'Goalkeeper', pos: 'GK', number: '1', x: 50, y: 86, isGK: true },
-  { id: 2, name: 'Player 2', role: 'Attacking Left', pos: 'ALA', number: '2', x: 78, y: 62 },
-  { id: 3, name: 'Player 3', role: 'Fixed', pos: 'FIXO', number: '3', x: 50, y: 62 },
-  { id: 4, name: 'Player 4', role: 'Attacking Left', pos: 'ALA', number: '4', x: 22, y: 62 },
-  { id: 5, name: 'Player 5', role: 'Pivot', pos: 'PIVO', number: '5', x: 78, y: 38 },
-  { id: 6, name: 'Player 6', role: 'Attacking Left', pos: 'ALA', number: '6', x: 22, y: 38 },
-  { id: 7, name: 'Player 7', role: 'Fixed', pos: 'FIXO', number: '7', x: 50, y: 38 },
-  { id: 8, name: 'Player 8', role: 'Pivot', pos: 'PIVO', number: '8', x: 50, y: 12 },
-];
-
-function cardSrc(id) {
-  return `/images/players/player-${String(id).padStart(2, '0')}.jpg`;
-}
-
-function thumbSrc(id) {
-  return `/images/players/player-${String(id).padStart(2, '0')}-thumb.jpg`;
-}
-
 export default function Team() {
-  const [selectedId, setSelectedId] = useState(1);
-  const selected = PLAYERS.find((p) => p.id === selectedId);
+  const [openId, setOpenId] = useState(null);
+  const openIndex = PLAYERS.findIndex((p) => p.id === openId);
+  const openPlayer = openIndex >= 0 ? PLAYERS[openIndex] : null;
+
+  function showPlayer(id) {
+    setOpenId(id);
+  }
+
+  function closeModal() {
+    setOpenId(null);
+  }
+
+  function showRelative(offset) {
+    const nextIndex = (openIndex + offset + PLAYERS.length) % PLAYERS.length;
+    setOpenId(PLAYERS[nextIndex].id);
+  }
 
   return (
     <>
       <PageIntro
         eyebrow="OUR SQUAD"
         title="Meet the Team"
-        subtitle="Click a player name to reveal the player card."
+        subtitle="Click a player to reveal their player card."
         scriptLines={['More than', 'a team']}
       />
 
@@ -59,14 +56,9 @@ export default function Team() {
                 <button
                   key={p.id}
                   type="button"
-                  className={
-                    'pitch-player' +
-                    (p.id === selectedId ? ' pitch-player--active' : '') +
-                    (p.isGK ? ' pitch-player--gk' : '')
-                  }
+                  className={'pitch-player' + (p.isGK ? ' pitch-player--gk' : '')}
                   style={{ left: `${p.x}%`, top: `${p.y}%` }}
-                  onClick={() => setSelectedId(p.id)}
-                  aria-pressed={p.id === selectedId}
+                  onClick={() => showPlayer(p.id)}
                 >
                   <span className="pitch-player__jersey">{p.number}</span>
                   <span className="pitch-player__label">{p.name}</span>
@@ -84,47 +76,39 @@ export default function Team() {
             <div className="panel__header">
               <p className="panel__title">
                 <span className="panel__title-rule" />
-                Player card
+                Roster
               </p>
               <p className="panel__caption panel__caption--single">FC GRASLOOS</p>
             </div>
 
-            <div className="roster-panel__body">
-              <div className="roster-panel__card">
-                <img
-                  src={cardSrc(selectedId)}
-                  alt={`${selected.name} (${selected.pos}) player card`}
-                  key={selectedId}
-                />
-              </div>
-
-              <ul className="roster-list">
-                {PLAYERS.map((p) => (
-                  <li key={p.id}>
-                    <button
-                      type="button"
-                      className={
-                        'roster-list__row' + (p.id === selectedId ? ' roster-list__row--active' : '')
-                      }
-                      onClick={() => setSelectedId(p.id)}
-                      aria-pressed={p.id === selectedId}
-                    >
-                      <img src={thumbSrc(p.id)} alt="" className="roster-list__thumb" />
-                      <span className="roster-list__text">
-                        <span className="roster-list__name">{p.name}</span>
-                        <span className="roster-list__role">
-                          {p.role} ({p.pos})
-                        </span>
+            <ul className="roster-list">
+              {PLAYERS.map((p) => (
+                <li key={p.id}>
+                  <button type="button" className="roster-list__row" onClick={() => showPlayer(p.id)}>
+                    <img src={thumbSrc(p.id)} alt="" className="roster-list__thumb" />
+                    <span className="roster-list__text">
+                      <span className="roster-list__name">{p.name}</span>
+                      <span className="roster-list__role">
+                        {p.role} ({p.pos})
                       </span>
-                      <ChevronRight size={18} className="roster-list__chevron" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    </span>
+                    <ChevronRight size={18} className="roster-list__chevron" />
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
+
+      {openPlayer && (
+        <PlayerModal
+          player={openPlayer}
+          onClose={closeModal}
+          onPrev={() => showRelative(-1)}
+          onNext={() => showRelative(1)}
+        />
+      )}
     </>
   );
 }

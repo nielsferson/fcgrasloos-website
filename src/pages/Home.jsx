@@ -1,8 +1,11 @@
 import { ArrowRight, Calendar as CalendarIcon, MapPin, Users, Trophy, Handshake } from 'lucide-react';
 import PitchCard from '../components/PitchCard';
+import { getNextMatch } from '../data/fixtures';
 import '../styles/home.css';
 
 export default function Home() {
+  const nextMatch = getNextMatch();
+
   return (
     <>
       <section className="hero">
@@ -91,18 +94,18 @@ export default function Home() {
 
                 <div className="match-card__team">
                   <div className="match-card__crest match-card__crest--tba">?</div>
-                  <span>TBA</span>
+                  <span>{nextMatch.opponent}</span>
                 </div>
               </div>
 
               <div className="match-card__details">
                 <div className="match-card__detail">
                   <CalendarIcon size={16} />
-                  <span>SAT, APR 26, 2025<br />20:00</span>
+                  <span>{nextMatch.date.toUpperCase()}<br />{nextMatch.time}</span>
                 </div>
                 <div className="match-card__detail match-card__detail--right">
                   <MapPin size={16} />
-                  <span>SPORTHAL OPGLABBEEK<br />Opglabbeek, Belgium</span>
+                  <span>{nextMatch.venue.toUpperCase()}<br />Opglabbeek, Belgium</span>
                 </div>
               </div>
 
