@@ -1,0 +1,309 @@
+/* ===== BOARD LAYOUT ===== */
+
+.team-board {
+  background: var(--fc-gray-light);
+  padding: 44px 0 80px;
+}
+
+.team-board__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--fc-white);
+  border-radius: 8px;
+  padding: 26px 28px 30px;
+  box-shadow: 0 1px 2px rgba(10, 14, 20, 0.04);
+}
+
+.panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.panel__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--fc-black);
+  margin: 0;
+}
+
+.panel__title-rule {
+  width: 22px;
+  height: 3px;
+  background: var(--fc-blue);
+  flex-shrink: 0;
+}
+
+.panel__title-sub {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fc-gray);
+  margin-top: 2px;
+}
+
+.panel__caption {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fc-gray);
+  text-align: right;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.panel__caption--single {
+  color: var(--fc-navy);
+}
+
+/* ===== PITCH ===== */
+
+.pitch {
+  position: relative;
+  aspect-ratio: 7 / 8;
+  background: radial-gradient(circle at 50% 20%, #262f3d 0%, #14181f 70%);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pitch__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.pitch-player {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.pitch-player__jersey {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--fc-navy);
+  clip-path: polygon(20% 0%, 35% 0%, 50% 12%, 65% 0%, 80% 0%, 100% 22%, 85% 38%, 75% 30%, 75% 100%, 25% 100%, 25% 30%, 15% 38%, 0% 22%);
+  color: var(--fc-white);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.pitch-player--gk .pitch-player__jersey {
+  background: var(--fc-red);
+}
+
+.pitch-player__label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--fc-navy);
+  background: var(--fc-white);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  border: 2px solid transparent;
+}
+
+.pitch-player:hover .pitch-player__jersey {
+  transform: scale(1.08);
+}
+
+.pitch-player--active .pitch-player__jersey {
+  background: var(--fc-red);
+  transform: scale(1.08);
+}
+
+.pitch-player--active .pitch-player__label {
+  color: var(--fc-blue);
+  border-color: var(--fc-blue);
+}
+
+.panel__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fc-gray);
+  line-height: 1.5;
+}
+
+.panel__footer span:last-child {
+  text-align: right;
+}
+
+/* ===== ROSTER PANEL ===== */
+
+.roster-panel__body {
+  display: grid;
+  grid-template-columns: minmax(230px, 300px) 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.roster-panel__card {
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(10, 14, 20, 0.18);
+}
+
+.roster-panel__card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.roster-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.roster-list__row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--fc-gray-light);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  text-align: left;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.roster-list__row:hover {
+  background: #eceef2;
+}
+
+.roster-list__row--active {
+  background: #e8f0fe;
+  border-color: var(--fc-blue);
+}
+
+.roster-list__thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.roster-list__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.roster-list__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--fc-navy);
+}
+
+.roster-list__role {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  color: var(--fc-gray);
+}
+
+.roster-list__chevron {
+  color: var(--fc-gray);
+  flex-shrink: 0;
+}
+
+.roster-list__row--active .roster-list__chevron {
+  color: var(--fc-blue);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1080px) {
+  .team-board__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roster-panel__body {
+    grid-template-columns: minmax(200px, 280px) 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .team-board {
+    padding: 32px 0 56px;
+  }
+
+  .panel {
+    padding: 20px 18px 24px;
+  }
+
+  .panel__header {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .panel__caption {
+    text-align: left;
+  }
+
+  .roster-panel__body {
+    grid-template-columns: 1fr;
+  }
+
+  .roster-panel__card {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .pitch-player__jersey {
+    width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
+  }
+
+  .pitch-player__label {
+    font-size: 0.64rem;
+    padding: 3px 9px;
+  }
+}

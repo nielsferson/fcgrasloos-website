@@ -1,0 +1,56 @@
+.pitch-card {
+  position: relative;
+  background: radial-gradient(circle at 75% 25%, #262626 0%, #0a0a0a 70%);
+  border-radius: 6px;
+  padding: 28px 26px;
+  color: var(--fc-white);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 220px;
+  height: 100%;
+}
+
+.pitch-card__ball {
+  position: absolute;
+  top: -10%;
+  right: -15%;
+  width: 70%;
+  height: auto;
+  color: rgba(255, 255, 255, 0.14);
+}
+
+.pitch-card__title {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1.85rem;
+  line-height: 1.05;
+  margin: 0 0 14px;
+}
+
+.pitch-card__title span {
+  color: var(--fc-red);
+}
+
+.pitch-card__sub {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
+}
+
+.pitch-card__rule {
+  width: 22px;
+  height: 3px;
+  background: var(--fc-red);
+  flex-shrink: 0;
+}
