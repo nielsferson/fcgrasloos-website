@@ -4,7 +4,33 @@ A tiny Cloudflare Worker that stores match scores in Workers KV and lets a
 logged-in admin edit them. The password is checked **server-side** here —
 it is never shipped in the website's JavaScript bundle.
 
-## One-time setup
+## Deploying via the Cloudflare dashboard (git-connected)
+
+If you created this Worker through **Workers & Pages → Import a repository**
+instead of the CLI, the most common failure is Cloudflare building from the
+**repo root** instead of this `worker/` subfolder — it'll try to deploy the
+whole Vite site as a Worker and fail (you'll see `Worker Name:
+fcgrasloos-website` and a `vite build` in the log instead of anything about
+`fcgrasloos-scores`).
+
+Fix it in the Worker's **Settings → Build**:
+- **Root directory**: `worker`
+- **Build command**: leave empty, or `npm run build` (now a no-op — see
+  `package.json`)
+- **Deploy command**: `npx wrangler deploy`
+
+Then trigger a redeploy. The log should now show `Worker Name:
+fcgrasloos-scores` and no `vite build` step. If your project's build
+settings don't expose a "Root directory" field to edit after creation,
+delete the project and re-run **Import a repository**, setting the root
+directory during that wizard instead.
+
+Once it deploys correctly, do steps 3–4 below (KV binding + secrets) from
+**Settings → Bindings** and **Settings → Variables and Secrets** in the
+dashboard rather than the CLI commands — same values, just clicking
+"Add" instead of typing `wrangler secret put`.
+
+## One-time setup (CLI)
 
 ```bash
 cd worker
