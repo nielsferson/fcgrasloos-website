@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Calendar as CalendarIcon, MapPin, Users, Pencil, Check, X } from 'lucide-react';
 import PageIntro from '../components/PageIntro';
 import PitchCard from '../components/PitchCard';
-import { FIXTURES, getNextMatch, venueMapUrl, fixtureKey } from '../data/fixtures';
+import { FIXTURES, getNextMatch, venueMapUrl, fixtureKey, parseIsoDate, isPastFixture } from '../data/fixtures';
 import { useAuth } from '../context/AuthContext';
 import { scoresEnabled, fetchScores, saveScore } from '../lib/scoresApi';
 import '../styles/calendar.css';
@@ -27,17 +27,11 @@ function groupByMonth(matches) {
 }
 
 function dateBadge(iso) {
-  const d = new Date(`${iso}T00:00:00`);
+  const d = parseIsoDate(iso);
   return {
     day: d.getDate(),
     month: d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase(),
   };
-}
-
-function isPast(iso) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return new Date(`${iso}T00:00:00`) < today;
 }
 
 function ScoreEditor({ initial, onCancel, onSubmit }) {
@@ -83,7 +77,7 @@ function ScoreEditor({ initial, onCancel, onSubmit }) {
 }
 
 function YearPanel({ year, matches, nextMatch, scores, isAuthed, editingKey, setEditingKey, onSaveScore }) {
-  const playedCount = matches.filter((m) => isPast(m.iso)).length;
+  const playedCount = matches.filter((m) => isPastFixture(m.iso)).length;
 
   return (
     <div className="panel year-panel">
@@ -117,7 +111,7 @@ function YearPanel({ year, matches, nextMatch, scores, isAuthed, editingKey, set
                 className={
                   'fixture-item' +
                   (isNext ? ' fixture-item--next' : '') +
-                  (isPast(m.iso) ? ' fixture-item--past' : '')
+                  (isPastFixture(m.iso) ? ' fixture-item--past' : '')
                 }
               >
                 <div className="fixture-item__date">
