@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Calendar as CalendarIcon, MapPin, Users, Trophy, Handshake } from 'lucide-react';
 import PitchCard from '../components/PitchCard';
-import { getNextMatch } from '../data/fixtures';
+import { getNextMatch, venueAddress, venueMapUrl } from '../data/fixtures';
 import '../styles/home.css';
 
 export default function Home() {
@@ -112,10 +112,15 @@ export default function Home() {
                   <CalendarIcon size={16} />
                   <span>{nextMatch.date.toUpperCase()}<br />{nextMatch.time}</span>
                 </div>
-                <div className="match-card__detail match-card__detail--right">
+                <a
+                  href={venueMapUrl(nextMatch.venue)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="match-card__detail match-card__detail--right venue-link"
+                >
                   <MapPin size={16} />
-                  <span>{nextMatch.venue.toUpperCase()}<br />Opglabbeek, Belgium</span>
-                </div>
+                  <span>{nextMatch.venue.toUpperCase()}<br />{venueAddress(nextMatch.venue)}</span>
+                </a>
               </div>
 
               <Link to="/calendar" className="btn btn-outline-light match-card__cta">

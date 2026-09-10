@@ -27,3 +27,16 @@ export function getNextMatch() {
   const upcoming = FIXTURES.find((f) => new Date(f.iso) >= today);
   return upcoming || FIXTURES[FIXTURES.length - 1];
 }
+
+const VENUE_ADDRESSES = {
+  'Sportcomplex Opglabbeek': 'Kruisstraat 7, 3660 Oudsbergen',
+  'Sportcentrum Meeuwen': 'Kerkplein 1, 3670 Oudsbergen',
+};
+
+export function venueAddress(venue) {
+  return VENUE_ADDRESSES[venue] || venue;
+}
+
+export function venueMapUrl(venue) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venueAddress(venue))}`;
+}

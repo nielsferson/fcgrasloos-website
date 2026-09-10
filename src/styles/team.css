@@ -142,29 +142,6 @@
   object-fit: contain;
 }
 
-.pitch-player__number {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--fc-navy);
-  color: var(--fc-white);
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  border-radius: 50%;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 0.78rem;
-  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.45);
-}
-
-.pitch-player--gk .pitch-player__number {
-  background: var(--fc-red);
-}
-
 .pitch-player__label {
   font-family: var(--font-display);
   font-weight: 700;
@@ -309,14 +286,8 @@
     width: 56px;
   }
 
-  .pitch-player__number {
-    width: 20px;
-    height: 20px;
-    font-size: 0.62rem;
-  }
-
   .pitch-player__label {
-    font-size: 0.64rem;
-    padding: 3px 9px;
+    font-size: 0.52rem;
+    padding: 2px 8px;
   }
 }
