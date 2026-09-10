@@ -17,11 +17,6 @@
   box-shadow: 0 1px 2px rgba(10, 14, 20, 0.04);
 }
 
-.fixtures-panel {
-  padding-left: 22px;
-  padding-right: 22px;
-}
-
 .panel__title {
   display: flex;
   align-items: center;
@@ -42,79 +37,156 @@
   flex-shrink: 0;
 }
 
-/* ===== FIXTURES TABLE ===== */
+/* ===== YEAR PANELS ===== */
 
-.fixtures-panel__columns {
+.year-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
+  align-items: start;
 }
 
-.fixture-header-row {
-  display: grid;
-  grid-template-columns: 76px 38px 1.5fr 64px 1fr;
-  gap: 6px;
-  padding: 0 8px 8px;
+.year-panel {
+  padding: 24px 22px 26px;
+}
+
+.year-panel__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.year-panel__year {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--fc-navy);
+}
+
+.year-panel__count {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.62rem;
-  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--fc-gray);
-  border-bottom: 1px solid var(--fc-border);
 }
 
-.fixture-group__month {
+.year-panel__progress {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--fc-gray-light);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.year-panel__progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--fc-blue), var(--fc-red));
+  border-radius: 4px;
+}
+
+.year-month {
+  margin-bottom: 6px;
+}
+
+.year-month__label {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--fc-navy);
   background: var(--fc-gray-light);
-  padding: 7px 8px;
-  margin: 6px 0 2px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  margin: 14px 0 8px;
 }
 
-.fixture-row {
-  display: grid;
-  grid-template-columns: 76px 38px 1.5fr 64px 1fr;
-  gap: 6px;
+.fixture-item {
+  display: flex;
   align-items: center;
-  padding: 8px 8px;
+  gap: 14px;
+  padding: 10px 6px;
   border-bottom: 1px solid var(--fc-border);
+  border-left: 3px solid transparent;
+  transition: background-color 0.15s ease;
+}
+
+.fixture-item:last-child {
+  border-bottom: none;
+}
+
+.fixture-item__date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.fixture-item__day {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 0.74rem;
+  font-weight: 800;
+  font-size: 1.25rem;
   color: var(--fc-black);
 }
 
-.fixture-row__date {
-  color: var(--fc-black);
-  font-weight: 600;
-  line-height: 1.2;
-  font-size: 0.68rem;
-}
-
-.fixture-row__time {
-  color: var(--fc-gray);
-  font-weight: 500;
-}
-
-.fixture-row__opponent {
+.fixture-item__month {
+  font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.2;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--fc-gray);
+  margin-top: 2px;
 }
 
-.fixture-row__venue {
+.fixture-item__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.fixture-item__opponent {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--fc-black);
+  margin: 0 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fixture-item__meta {
+  display: flex;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
   color: var(--fc-gray);
-  font-size: 0.7rem;
-  font-weight: 500;
-  line-height: 1.25;
+  margin: 0;
+}
+
+.fixture-item--next {
+  border-left-color: var(--fc-red);
+  background: #fef4f4;
+}
+
+.fixture-item--next .fixture-item__day {
+  color: var(--fc-red);
+}
+
+.fixture-item--past {
+  opacity: 0.45;
 }
 
 .fixture-badge {
   display: inline-block;
+  flex-shrink: 0;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.68rem;
@@ -271,13 +343,6 @@
   line-height: 1.5;
 }
 
-.next-match__cta {
-  width: 100%;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  padding: 13px 20px;
-}
-
 /* ===== SEASON OVERVIEW ===== */
 
 .season-panel {
@@ -351,9 +416,8 @@
 }
 
 @media (max-width: 860px) {
-  .fixtures-panel__columns {
+  .year-columns {
     grid-template-columns: 1fr;
-    gap: 8px;
   }
 }
 
@@ -366,42 +430,12 @@
     padding: 20px 18px 24px;
   }
 
-  .fixture-header-row {
-    display: none;
+  .year-panel {
+    padding: 20px 16px 22px;
   }
 
-  .fixture-row {
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      'date badge'
-      'opponent opponent'
-      'time venue';
-    row-gap: 4px;
-    padding: 12px 10px;
-  }
-
-  .fixture-row__date {
-    grid-area: date;
-  }
-
-  .fixture-row span:has(.fixture-badge) {
-    grid-area: badge;
-    justify-self: end;
-  }
-
-  .fixture-row__opponent {
-    grid-area: opponent;
+  .fixture-item__opponent {
     white-space: normal;
-    font-size: 0.88rem;
-  }
-
-  .fixture-row__time {
-    grid-area: time;
-  }
-
-  .fixture-row__venue {
-    grid-area: venue;
-    text-align: right;
   }
 
   .cal-sidebar {

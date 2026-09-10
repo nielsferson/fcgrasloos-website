@@ -49,8 +49,8 @@
 
 .panel__title-sub {
   display: block;
-  font-family: var(--font-body);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-weight: 600;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;

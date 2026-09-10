@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import '../styles/header.css';
 
@@ -12,6 +12,8 @@ const NAV_LINKS = [
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Prevent background scroll when the mobile menu is open
   useEffect(() => {
@@ -20,6 +22,17 @@ export default function Header() {
       document.body.style.overflow = '';
     };
   }, [menuOpen]);
+
+  function goToNextMatch(e) {
+    setMenuOpen(false);
+    if (location.pathname === '/') {
+      e.preventDefault();
+      document.getElementById('next-match')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      e.preventDefault();
+      navigate('/', { state: { scrollTo: 'next-match' } });
+    }
+  }
 
   return (
     <header className="site-header">
@@ -50,9 +63,9 @@ export default function Header() {
           </ul>
         </nav>
 
-        <a href="#next-match" className="btn btn-primary site-header__cta">
+        <Link to="/" className="btn btn-primary site-header__cta" onClick={goToNextMatch}>
           Play Together<br />Go Further
-        </a>
+        </Link>
 
         <button
           className="site-header__toggle"
@@ -82,13 +95,13 @@ export default function Header() {
               </li>
             ))}
           </ul>
-          <a
-            href="#next-match"
+          <Link
+            to="/"
             className="btn btn-primary site-header__mobile-cta"
-            onClick={() => setMenuOpen(false)}
+            onClick={goToNextMatch}
           >
             Play Together Go Further
-          </a>
+          </Link>
         </nav>
       </div>
     </header>
