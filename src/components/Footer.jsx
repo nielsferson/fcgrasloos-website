@@ -15,13 +15,31 @@ export default function Footer() {
 
         <div className="site-footer__social">
           <span className="site-footer__follow">Follow us</span>
-          <a href="#" aria-label="FC Grasloos on Instagram" className="site-footer__icon">
+          <a
+            href="#"
+            aria-label="FC Grasloos on Instagram (coming soon)"
+            title="Coming soon"
+            className="site-footer__icon"
+            onClick={(e) => e.preventDefault()}
+          >
             <Instagram size={18} />
           </a>
-          <a href="#" aria-label="FC Grasloos on Facebook" className="site-footer__icon">
+          <a
+            href="#"
+            aria-label="FC Grasloos on Facebook (coming soon)"
+            title="Coming soon"
+            className="site-footer__icon"
+            onClick={(e) => e.preventDefault()}
+          >
             <Facebook size={18} />
           </a>
-          <a href="#" aria-label="FC Grasloos on YouTube" className="site-footer__icon">
+          <a
+            href="#"
+            aria-label="FC Grasloos on YouTube (coming soon)"
+            title="Coming soon"
+            className="site-footer__icon"
+            onClick={(e) => e.preventDefault()}
+          >
             <Youtube size={18} />
           </a>
         </div>

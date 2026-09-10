@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Calendar as CalendarIcon, MapPin, Users, Trophy, Handshake } from 'lucide-react';
 import PitchCard from '../components/PitchCard';
 import { getNextMatch } from '../data/fixtures';
@@ -5,6 +7,13 @@ import '../styles/home.css';
 
 export default function Home() {
   const nextMatch = getNextMatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      document.getElementById(location.state.scrollTo)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [location.state]);
 
   return (
     <>
@@ -25,12 +34,12 @@ export default function Home() {
               Playing since 2015
             </p>
             <div className="hero__actions">
-              <a href="/team" className="btn btn-primary">
+              <Link to="/team" className="btn btn-primary">
                 Meet the Team <ArrowRight size={18} />
-              </a>
-              <a href="/calendar" className="btn btn-outline-light">
+              </Link>
+              <Link to="/calendar" className="btn btn-outline-light">
                 <CalendarIcon size={18} /> View Calendar
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -109,9 +118,9 @@ export default function Home() {
                 </div>
               </div>
 
-              <a href="/calendar" className="btn btn-outline-light match-card__cta">
+              <Link to="/calendar" className="btn btn-outline-light match-card__cta">
                 View Full Calendar <ArrowRight size={18} />
-              </a>
+              </Link>
             </div>
 
             <PitchCard />

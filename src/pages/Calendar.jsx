@@ -1,44 +1,94 @@
-import { Calendar as CalendarIcon, MapPin, Users, ArrowRight } from 'lucide-react';
+import { Calendar as CalendarIcon, MapPin, Users } from 'lucide-react';
 import PageIntro from '../components/PageIntro';
 import PitchCard from '../components/PitchCard';
 import { FIXTURES, getNextMatch } from '../data/fixtures';
 import '../styles/calendar.css';
 
-const LEFT_MONTHS = ['September 2026', 'October 2026', 'November 2026', 'December 2026', 'January 2027', 'February 2027'];
-const RIGHT_MONTHS = ['March 2027', 'April 2027', 'May 2027', 'June 2027'];
-
-function groupByMonth(months) {
-  return months
-    .map((month) => ({ month, matches: FIXTURES.filter((f) => f.month === month) }))
-    .filter((group) => group.matches.length > 0);
+function groupByYear(fixtures) {
+  const years = new Map();
+  fixtures.forEach((f) => {
+    const year = f.iso.slice(0, 4);
+    if (!years.has(year)) years.set(year, []);
+    years.get(year).push(f);
+  });
+  return Array.from(years, ([year, matches]) => ({ year, matches }));
 }
 
-function FixtureTable({ groups }) {
+function groupByMonth(matches) {
+  const months = new Map();
+  matches.forEach((m) => {
+    if (!months.has(m.month)) months.set(m.month, []);
+    months.get(m.month).push(m);
+  });
+  return Array.from(months, ([month, monthMatches]) => ({ month, matches: monthMatches }));
+}
+
+function dateBadge(iso) {
+  const d = new Date(`${iso}T00:00:00`);
+  return {
+    day: d.getDate(),
+    month: d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase(),
+  };
+}
+
+function isPast(iso) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(`${iso}T00:00:00`) < today;
+}
+
+function YearPanel({ year, matches, nextMatch }) {
+  const playedCount = matches.filter((m) => isPast(m.iso)).length;
+
   return (
-    <div className="fixture-column">
-      <div className="fixture-header-row">
-        <span>Date</span>
-        <span>Time</span>
-        <span>Opponent</span>
-        <span>H/A</span>
-        <span>Venue</span>
+    <div className="panel year-panel">
+      <div className="year-panel__header">
+        <span className="year-panel__year">{year}</span>
+        <span className="year-panel__count">
+          {matches.length} fixture{matches.length === 1 ? '' : 's'}
+        </span>
       </div>
-      {groups.map((group) => (
-        <div key={group.month} className="fixture-group">
-          <p className="fixture-group__month">{group.month.toUpperCase()}</p>
-          {group.matches.map((m) => (
-            <div className="fixture-row" key={m.iso + m.opponent}>
-              <span className="fixture-row__date">{m.date}</span>
-              <span className="fixture-row__time">{m.time}</span>
-              <span className="fixture-row__opponent">{m.opponent}</span>
-              <span>
+
+      <div className="year-panel__progress">
+        <div
+          className="year-panel__progress-bar"
+          style={{ width: `${matches.length ? (playedCount / matches.length) * 100 : 0}%` }}
+        />
+      </div>
+
+      {groupByMonth(matches).map((group) => (
+        <div className="year-month" key={group.month}>
+          <p className="year-month__label">{group.month.split(' ')[0].toUpperCase()}</p>
+          {group.matches.map((m) => {
+            const badge = dateBadge(m.iso);
+            const isNext = m.iso === nextMatch.iso && m.opponent === nextMatch.opponent;
+            return (
+              <div
+                key={m.iso + m.opponent}
+                className={
+                  'fixture-item' +
+                  (isNext ? ' fixture-item--next' : '') +
+                  (isPast(m.iso) ? ' fixture-item--past' : '')
+                }
+              >
+                <div className="fixture-item__date">
+                  <span className="fixture-item__day">{badge.day}</span>
+                  <span className="fixture-item__month">{badge.month}</span>
+                </div>
+                <div className="fixture-item__main">
+                  <p className="fixture-item__opponent">{m.opponent}</p>
+                  <p className="fixture-item__meta">
+                    <span>{m.time}</span>
+                    <span>&bull;</span>
+                    <span>{m.venue}</span>
+                  </p>
+                </div>
                 <span className={'fixture-badge' + (m.home ? ' fixture-badge--home' : ' fixture-badge--away')}>
                   {m.home ? 'HOME' : 'AWAY'}
                 </span>
-              </span>
-              <span className="fixture-row__venue">{m.venue}</span>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       ))}
     </div>
@@ -47,6 +97,7 @@ function FixtureTable({ groups }) {
 
 export default function Calendar() {
   const nextMatch = getNextMatch();
+  const years = groupByYear(FIXTURES);
 
   return (
     <>
@@ -59,15 +110,10 @@ export default function Calendar() {
 
       <section className="cal-board">
         <div className="container cal-board__grid">
-          <div className="panel fixtures-panel">
-            <p className="panel__title">
-              <span className="panel__title-rule" />
-              Fixtures
-            </p>
-            <div className="fixtures-panel__columns">
-              <FixtureTable groups={groupByMonth(LEFT_MONTHS)} />
-              <FixtureTable groups={groupByMonth(RIGHT_MONTHS)} />
-            </div>
+          <div className="year-columns">
+            {years.map(({ year, matches }) => (
+              <YearPanel key={year} year={year} matches={matches} nextMatch={nextMatch} />
+            ))}
           </div>
 
           <div className="cal-sidebar">
@@ -112,10 +158,6 @@ export default function Calendar() {
                   <span>{nextMatch.venue}</span>
                 </div>
               </div>
-
-              <a href="#fixtures" className="btn btn-outline-light next-match__cta">
-                View Match Details <ArrowRight size={18} />
-              </a>
             </div>
 
             <div className="panel season-panel">
