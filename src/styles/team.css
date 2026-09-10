@@ -98,7 +98,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   background: none;
   border: none;
   padding: 0;
@@ -107,13 +107,33 @@
 
 .pitch-player__jersey {
   position: relative;
-  width: 46px;
-  height: 46px;
+  width: 74px;
+  aspect-ratio: 3 / 4;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45));
-  transition: transform 0.15s ease;
+  filter:
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 18px rgba(30, 80, 200, 0.45));
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.pitch-player--gk .pitch-player__jersey {
+  filter:
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 18px rgba(214, 31, 44, 0.45));
+}
+
+.pitch-player__jersey::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  transform: translateX(-50%);
+  width: 62%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 72%);
+  z-index: -1;
 }
 
 .pitch-player__jersey img {
@@ -124,21 +144,21 @@
 
 .pitch-player__number {
   position: absolute;
-  top: -4px;
-  right: -6px;
-  width: 19px;
-  height: 19px;
+  top: -2px;
+  right: -2px;
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--fc-navy);
   color: var(--fc-white);
-  border: 1.5px solid var(--fc-white);
+  border: 2px solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 0.62rem;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  font-size: 0.78rem;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.45);
 }
 
 .pitch-player--gk .pitch-player__number {
@@ -148,11 +168,11 @@
 .pitch-player__label {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   letter-spacing: 0.02em;
   color: var(--fc-navy);
   background: var(--fc-white);
-  padding: 4px 12px;
+  padding: 4px 13px;
   border-radius: 20px;
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
@@ -163,6 +183,22 @@
 .pitch-player:focus-visible .pitch-player__jersey,
 .pitch-player--active .pitch-player__jersey {
   transform: scale(1.1);
+}
+
+.pitch-player:hover .pitch-player__jersey,
+.pitch-player:focus-visible .pitch-player__jersey,
+.pitch-player--active .pitch-player__jersey {
+  filter:
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 26px rgba(30, 80, 200, 0.7));
+}
+
+.pitch-player--gk:hover .pitch-player__jersey,
+.pitch-player--gk:focus-visible .pitch-player__jersey,
+.pitch-player--gk.pitch-player--active .pitch-player__jersey {
+  filter:
+    drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 26px rgba(214, 31, 44, 0.7));
 }
 
 .pitch-player:hover .pitch-player__label,
@@ -212,29 +248,6 @@
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.roster-panel__card-jersey {
-  position: absolute;
-  left: 14px;
-  bottom: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--fc-navy);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  color: var(--fc-white);
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.05rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
-}
-
-.roster-panel__card-jersey--gk {
-  background: var(--fc-red);
 }
 
 .roster-panel__card-info {
@@ -293,14 +306,13 @@
   }
 
   .pitch-player__jersey {
-    width: 40px;
-    height: 40px;
+    width: 56px;
   }
 
   .pitch-player__number {
-    width: 16px;
-    height: 16px;
-    font-size: 0.56rem;
+    width: 20px;
+    height: 20px;
+    font-size: 0.62rem;
   }
 
   .pitch-player__label {

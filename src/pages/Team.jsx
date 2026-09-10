@@ -81,9 +81,6 @@ export default function Team() {
                   alt={`${selected.name} (${selected.pos}) player card`}
                   key={selectedId}
                 />
-                <span className={'roster-panel__card-jersey' + (selected.isGK ? ' roster-panel__card-jersey--gk' : '')}>
-                  {selected.number}
-                </span>
               </div>
               <div className="roster-panel__card-info">
                 <p className="roster-panel__card-pos">{selected.pos}</p>
